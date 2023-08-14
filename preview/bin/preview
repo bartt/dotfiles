@@ -1,3 +1,0 @@
-#!/bin/sh
-
-qlmanage -p \"$1\"
