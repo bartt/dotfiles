@@ -29,12 +29,10 @@ function streamdeck_imageFromText(text, options)
     if (lines > 1) then
        offset = 0 
     end
-    dbg(text .. ' ' .. lines .. ' ' .. fontSize)
     if (not options['fontSize']) then
         fontSize = fontSize / lines
     end
     lineHeight = lineHeight / lines
-    dbg(buttonHeight .. ' ' .. lineHeight .. ' ' .. fontSize)
     local elements = { }
     table.insert(elements, {
         action = "fill",
