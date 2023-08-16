@@ -160,7 +160,7 @@ function caffeinateCallback(eventType)
     elseif (eventType == hs.caffeinate.watcher.screensDidWake) then
         -- Do nothing
     elseif (eventType == hs.caffeinate.watcher.screensDidLock) then
-        streamdeck_sleep()
+        -- streamdeck_sleep()
     elseif (eventType == hs.caffeinate.watcher.screensDidUnlock) then
         streamdeck_wake()
     end

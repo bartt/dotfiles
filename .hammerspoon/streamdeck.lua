@@ -168,7 +168,8 @@ end
 -- Updates button update timers for all buttons
 local function updateTimers()
     disableTimers()
-    if asleep or currentDeck == nil then
+    -- if asleep or currentDeck == nil then
+    if currentDeck == nil then
         return
     end
 
@@ -298,9 +299,9 @@ end
 -- Button callback from hs.streamdeck
 local function streamdeck_button(deck, buttonID, pressed)
     -- Don't allow commands while the machine is asleep / locked
-    if asleep then
-        return
-    end
+    -- if asleep then
+    --     return
+    -- end
 
     -- Grab the button
     local buttonForID = currentlyVisibleButtons()[buttonID]
@@ -358,11 +359,11 @@ local function streamdeck_discovery(connected, deck)
         currentDeck = nil
         updateTimers()
     end
-    if asleep then
-        streamdeck_sleep()
-    else
+    -- if asleep then
+    --     streamdeck_sleep()
+    -- else
         streamdeck_wake()
-    end
+    -- end
     profileStop('streamdeckDiscovery')
 end
 
