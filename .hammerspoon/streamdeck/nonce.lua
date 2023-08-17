@@ -13,17 +13,17 @@ function nonceButton()
             end
 
             local elements = { }
-            table.insert(elements, {
-                action = "fill",
-                frame = { x = 0, y = 0, w = buttonWidth, h = buttonHeight },
-                fillColor = background,
-                type = "rectangle",
-            })
+            -- table.insert(elements, {
+            --     action = "fill",
+            --     frame = { x = 0, y = 0, w = buttonWidth, h = buttonHeight },
+            --     fillColor = background,
+            --     type = "rectangle",
+            -- })
             table.insert(elements, {
                 action = "fill",
                 frame = { x = inset, y = inset, w = buttonWidth - 2 * inset, h = buttonHeight - 2 * inset },
                 type = "rectangle",
-                fillColor = color,
+                fillColor = hs.drawing.color.hammerspoon.black,
                 roundedRectRadii = { ["xRadius"] = radius, ["yRadius"] = radius },
             })
             return streamdeck_imageWithCanvasContents(elements)

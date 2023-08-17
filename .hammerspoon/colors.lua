@@ -103,6 +103,7 @@ local function updateThemeColors()
     unemphasizedSelectedTextColor = hs.drawing.color.lists()['System']['unemphasizedSelectedTextColor']
     windowBackgroundColor = hs.drawing.color.lists()['System']['windowBackgroundColor']
     windowFrameTextColor = hs.drawing.color.lists()['System']['windowFrameTextColor']
+    whiteColor = hs.drawing.color.hammerspoon.white
 
     tintColor = systemOrangeColor
     systemBackgroundColor = windowBackgroundColor

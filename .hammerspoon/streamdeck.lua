@@ -58,7 +58,7 @@ function currentlyVisibleButtons()
     -- If we have a pushed button state, then add a back button
     if tableLength(buttonStateStack) > 1 then
         local closeButton = {
-            ['image'] = streamdeck_imageFromText('◄'),
+            ['image'] = streamdeck_imageFromSvgFile('return'),
             ['onClick'] = function()
                 popButtonState()
             end
@@ -75,7 +75,7 @@ function currentlyVisibleButtons()
     -- This should be the far left, under the top left button
     if tableLength(providedButtons) > totalButtons then
         local scrollUp = {
-            ['image'] = streamdeck_imageFromText('▲'),
+            ['image'] = streamdeck_imageFromSvgFile('up'),
             ['onClick'] = function()
                 scrollBy(-1)
             end,
@@ -84,7 +84,7 @@ function currentlyVisibleButtons()
             end
         }
         local scrollDown = {
-            ['image'] = streamdeck_imageFromText('▼'),
+            ['image'] = streamdeck_imageFromSvgFile('down'),
             ['onClick'] = function()
                 scrollBy(1)
             end

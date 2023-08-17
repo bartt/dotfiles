@@ -1,7 +1,7 @@
 function windowSwitcher()
     return {
         ['name'] = "Window Switcher",
-        ['image'] = streamdeck_imageFromText("􀏜"),
+        ['image'] = streamdeck_imageFromSvgFile('windows'),
         ['children'] = function()
             local out = { }
             for index, window in pairs(hs.window.allWindows()) do

@@ -2,7 +2,7 @@ require "streamdeck.peek"
 function appSwitcher()
     return {
         ['name'] = "App Switcher",
-        ['image'] = streamdeck_imageFromText("▦"),
+        ['image'] = streamdeck_imageFromSvgFile("grid"),
         ['children'] = function()
             local out = { }
             for index, app in pairs(hs.application.runningApplications()) do

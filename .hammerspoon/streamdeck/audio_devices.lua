@@ -51,12 +51,12 @@ function audioDeviceButton(input)
             local volume = context['state']['volume']
 
             local elements = { }
-            table.insert(elements, {
-                action = "fill",
-                frame = { x = 0, y = 0, w = buttonWidth, h = buttonHeight },
-                fillColor = systemBackgroundColor,
-                type = "rectangle",
-            })
+            -- table.insert(elements, {
+            --     action = "fill",
+            --     frame = { x = 0, y = 0, w = buttonWidth, h = buttonHeight },
+            --     fillColor = systemBackgroundColor,
+            --     type = "rectangle",
+            -- })
 
             local volumeIndicatorYOffset = 0
             local volumeIndicatorWidth = buttonWidth
@@ -84,7 +84,7 @@ function audioDeviceButton(input)
 
             for k,v in pairs(allAudioDevices(input)) do
                 local text = empty
-                local color = secondaryLabelColor
+                local color = whiteColor
                 if v:name() == currentDeviceName then
                     text = full
                     color = tintColor
