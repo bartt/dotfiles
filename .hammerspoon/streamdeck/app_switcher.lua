@@ -19,9 +19,14 @@ function appSwitcher()
                 if string.find(app:name(), 'Santa') then goto continue end
                 if string.find(app:name(), 'Tray') then goto continue end
                 if string.find(app:name(), 'Caffeine') then goto continue end
+                if string.find(app:bundleID(), 'snipit') then goto continue end
+                if string.find(app:bundleID(), 'Rocket') then goto continue end
+                if string.find(app:name(), 'Logi Options+') then goto continue end
+                if string.find(app:bundleID(), 'com.flickr.flickrmac') then goto continue end
                 if string.find(path, 'Helper') then goto continue end
                 if string.find(path, 'gMenu') then goto continue end
                 if string.find(path, 'Falcon') then goto continue end
+                dbg(app)
                 appButton = peekButtonFor(app:bundleID())
                 out[#out+1] = appButton
                 ::continue::
