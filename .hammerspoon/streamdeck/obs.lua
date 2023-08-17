@@ -2,10 +2,11 @@ require "util"
 
 obs = hs.loadSpoon("OBS")
 
-obsScenes = {}
-obsCurrentSceneName = nil
-obsIsConnected = false
-obsIsVirtualCamOn = false
+local obsScenes = {}
+local obsCurrentSceneName = nil
+local obsIsConnected = false
+local obsIsVirtualCamOn = false
+local isMicrophoneOn = true
 
 obsCallback = function(eventType, eventIntent, eventData)
     print(eventType)
@@ -25,6 +26,7 @@ obsCallback = function(eventType, eventIntent, eventData)
         obsIsVirtualCamOn = false
         obsCurrentSceneName = nil
         obsScenes = {}
+        isMicrophoneOn = true
     end
 
     if eventType == 'VirtualcamStateChanged' then
@@ -73,8 +75,8 @@ obsButton = {
     ['name'] = 'OBS',
     ['stateProvider'] = function()
         return {
-            connected = obsIsConnected,
-            virtualCamOn = obsIsVirtualCamOn
+            ['connected'] = obsIsConnected,
+            ['virtualCamOn'] = obsIsVirtualCamOn
         }
     end,
     ['imageProvider'] = function(context)
@@ -130,26 +132,8 @@ obsButton = {
     end,
     ['children'] = function()
         local out = {}
-        out[#out + 1] = {
-            ['stateProvider'] = function()
-                return {
-                    ['connected'] = obsIsConnected,
-                    ['virtualCamOn'] = obsIsVirtualCamOn
-                }
-            end,
-            ['imageProvider'] = function(context)
-                local elements = {}
-                if context['state']['virtualCamOn'] then
-                    elements[#elements + 1] = elementBackground(systemRedColor)
-                end
-                elements[#elements + 1] = elementFromSvgFile('webcam')
-                return streamdeck_imageWithCanvasContents(elements)
-            end,
-            ['onClick'] = function()
-                obs:request('ToggleVirtualCam')
-            end,
-            ['updateInterval'] = 1
-        }
+        out[#out + 1] = webcamButton
+        out[#out + 1] = microphoneButton
         for sceneName, sceneImage in pairs(obsScenes) do
             out[#out + 1] = sceneButton(sceneName)
         end
@@ -158,13 +142,60 @@ obsButton = {
     ['updateInterval'] = 1
 }
 
+webcamButton = {
+    ['stateProvider'] = function()
+        return {
+            ['connected'] = obsIsConnected,
+            ['virtualCamOn'] = obsIsVirtualCamOn
+        }
+    end,
+    ['imageProvider'] = function(context)
+        local elements = {}
+        if context['state']['virtualCamOn'] then
+            elements[#elements + 1] = elementBackground(systemRedColor)
+        end
+        elements[#elements + 1] = elementFromSvgFile('webcam')
+        return streamdeck_imageWithCanvasContents(elements)
+    end,
+    ['onClick'] = function()
+        obs:request('ToggleVirtualCam')
+    end,
+    ['updateInterval'] = 1
+}
+
+microphoneButton = {
+    ['stateProvider'] = function()
+        return {
+            ['microphoneOn'] = isMicrophoneOn
+        }
+    end,
+    ['imageProvider'] = function(context)
+        local elements = {}
+        local microphoneSvg = 'microphone-off'
+        if context['state']['microphoneOn'] then
+            elements[#elements + 1] = elementBackground(systemRedColor)
+            microphoneSvg = 'microphone-on'
+        end
+        elements[#elements + 1] = elementFromSvgFile(microphoneSvg)
+        return streamdeck_imageWithCanvasContents(elements)
+    end,
+    ['onClick'] = function()
+        local success = hs.osascript.applescriptFromFile('osascript/meet-microphone.applescript')
+        if (success) then 
+            isMicrophoneOn = not isMicrophoneOn
+        else 
+            print("Failed to toggle Meet microphone")
+        end
+    end,
+    ['updateInterval'] = 1
+}
 function sceneButton(sceneName)
     local sceneName = sceneName
     return {
         ['stateProvider'] = function()
             return {
-                name = sceneName,
-                active = sceneName == obsCurrentSceneName
+                ['name'] = sceneName,
+                ['active'] = sceneName == obsCurrentSceneName
             }
         end,
         ['imageProvider'] = function(context)
