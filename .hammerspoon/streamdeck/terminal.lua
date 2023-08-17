@@ -2,14 +2,13 @@ require "color_support"
 require "terminal"
 
 local function terminalButton(button)
+    local bundleID = 'com.apple.ActivityMonitor'
     local out = button
     out['onClick'] = function()
-        hs.application.open('com.apple.ActivityMonitor')
-        performAfter = button['performAfter'] or function()
-        end
-        hs.timer.doAfter(0.1, function()
-            performAfter()
-        end)
+        peekAtApp(bundleID)
+    end
+    out['onLongPress'] = function(holding)
+        peekAtApp(bundleID)
     end
     return out
 end
@@ -64,10 +63,6 @@ cpuButton = terminalButton({
         }
         return streamdeck_imageWithCanvasContents(elements)
     end,
-    ['performAfter'] = function()
-        hs.eventtap.keyStrokes("ocpu")
-        hs.eventtap.keyStroke({}, "return")
-    end,
     ['updateInterval'] = 10
 })
 
@@ -120,10 +115,6 @@ memoryButton = terminalButton({
             type = "text"
         }
         return streamdeck_imageWithCanvasContents(elements)
-    end,
-    ['performAfter'] = function()
-        hs.eventtap.keyStrokes("omem")
-        hs.eventtap.keyStroke({}, "return")
     end,
     ['updateInterval'] = 10
 })
