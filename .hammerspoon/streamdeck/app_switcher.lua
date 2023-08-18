@@ -26,7 +26,6 @@ function appSwitcher()
                 if string.find(path, 'Helper') then goto continue end
                 if string.find(path, 'gMenu') then goto continue end
                 if string.find(path, 'Falcon') then goto continue end
-                dbg(app)
                 appButton = peekButtonFor(app:bundleID())
                 out[#out+1] = appButton
                 ::continue::

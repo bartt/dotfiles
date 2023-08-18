@@ -8,11 +8,21 @@ local obsIsConnected = false
 local obsIsVirtualCamOn = false
 local isMicrophoneOn = true
 
+local function updateScreenshots()
+    local sceneCount = 0
+    for k,v in pairs(obsScenes) do
+        sceneCount = sceneCount + 1
+    end
+    if obsIsConnected and sceneCount > 0 then
+        getScreenshots(obsScenes)
+    end
+end
+
 obsCallback = function(eventType, eventIntent, eventData)
     print(eventType)
     print(eventIntent)
     if not (eventType == 'SpoonBatchRequestResponse') then
-        dbg(eventData)
+        -- dbg(eventData)
     end
 
     if eventType == 'SpoonOBSConnected' then
@@ -55,7 +65,7 @@ obsCallback = function(eventType, eventIntent, eventData)
 
     if eventType == 'SpoonBatchRequestResponse' then
         for i, eventData in pairs(eventData['results']) do
-            dbg(eventData)
+            -- dbg(eventData)
             if eventData['requestType'] == 'GetSourceScreenshot' then
                 local imageData = eventData['responseData'] and eventData['responseData']['imageData']
                 -- The request was made with the sceneName as the requestId. 
@@ -105,6 +115,7 @@ obsButton = {
         return streamdeck_imageWithCanvasContents(elements)
     end,
     ['onClick'] = function()
+        activateConference()
         if (hs.application.get(obsBundleId) == nil) then
             hs.application.open(obsBundleId, 0, true)
             obs:start()
@@ -113,27 +124,30 @@ obsButton = {
                 obs:start()
             end
         end
-        if obsIsConnected and #obsScenes > 0 then
-            getScreenshots(obsScenes)
-        end
+        updateScreenshots()
     end,
-    ['onLongPress'] = function()
-        if obsIsVirtualCamOn then
-            obs:request('ToggleVirtualCam')
-        end
-        hs.timer.waitWhile(function()
-            return obsIsVirtualCamOn
-        end, function()
-            local obsApp = hs.application.get(obsBundleId)
-            if obsApp then
-                obsApp:kill()
+    ['onLongPress'] = function(holding)
+        if holding then
+            if obsIsVirtualCamOn then
+                obs:request('ToggleVirtualCam')
             end
-        end)
+            hs.timer.waitWhile(function()
+                return obsIsVirtualCamOn
+            end, function()
+                activateScreentime()
+                local obsApp = hs.application.get(obsBundleId)
+                if obsApp then
+                    obsApp:kill()
+                end
+            end)
+        end
     end,
     ['children'] = function()
         local out = {}
         out[#out + 1] = webcamButton
         out[#out + 1] = microphoneButton
+        out[#out + 1] = conferenceButton
+        out[#out + 1] = screentimeButton
         for sceneName, sceneImage in pairs(obsScenes) do
             out[#out + 1] = sceneButton(sceneName)
         end
@@ -195,7 +209,8 @@ function sceneButton(sceneName)
         ['stateProvider'] = function()
             return {
                 ['name'] = sceneName,
-                ['active'] = sceneName == obsCurrentSceneName
+                ['active'] = sceneName == obsCurrentSceneName,
+                ['timestamp'] = os.date('*t')
             }
         end,
         ['imageProvider'] = function(context)
