@@ -22,13 +22,13 @@ initialButtonState = {
         clockButton,
         cpuButton,
         memoryButton,
-        screentimeButton,
+        hovelButton,
 
         audioDeviceButton(false),
         audioDeviceButton(true),
         peekButtonFor('com.reederapp.rkit2.mac'),
         obsButton,
-        conferenceButton,
+        nonceButton(),
 
         lockButton,
         appSwitcher(),

@@ -62,7 +62,7 @@ end
 
 function streamdeck_imageFromSvgFile(imageName)
     local elements = {}
-    table.insert(elements, elementFromSvgFile(imageName))
+    elements[#elements + 1] = elementFromSvgFile(imageName)
     return streamdeck_imageWithCanvasContents(elements)
 end
 
