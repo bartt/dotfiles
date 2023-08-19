@@ -72,10 +72,10 @@ function elementFromSvgFile(imageName)
         image = gifImageFromSvgFile(imageName),
         imageScaling = 'shrinkToFit',
         frame = {
-            x = 5,
-            y = 5,
-            h = buttonWidth - 10,
-            w = buttonHeight - 10
+            x = 8,
+            y = 8,
+            h = buttonWidth - 16,
+            w = buttonHeight - 16
         }
     }
 end

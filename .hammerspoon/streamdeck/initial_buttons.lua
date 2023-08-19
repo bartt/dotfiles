@@ -20,20 +20,19 @@ initialButtonState = {
         weatherButton(),
         -- calendarPeekButton(),
         clockButton,
-        cpuButton,
-        memoryButton,
+        appSwitcher(),
+        windowSwitcher(),
         hovelButton,
 
         audioDeviceButton(false),
         audioDeviceButton(true),
-        peekButtonFor('com.reederapp.rkit2.mac'),
+        cpuButton,
+        memoryButton,
         obsButton,
-        nonceButton(),
 
         lockButton,
-        appSwitcher(),
-        windowSwitcher(),
         functionKeys(),
+        -- peekButtonFor('com.reederapp.rkit2.mac'),
         -- soundboardButton(),
     }
 }
