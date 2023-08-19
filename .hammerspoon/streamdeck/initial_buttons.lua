@@ -13,6 +13,7 @@ require "streamdeck.shortcuts"
 require "streamdeck.soundboard"
 require "streamdeck.nonce"
 require "streamdeck.hovel"
+require "streamdeck.favorite_apps"
 
 initialButtonState = {
     ['name'] = 'Root',
@@ -29,8 +30,9 @@ initialButtonState = {
         cpuButton,
         memoryButton,
         obsButton,
-
+ 
         lockButton,
+        favoriteAppsButton,
         functionKeys(),
         -- peekButtonFor('com.reederapp.rkit2.mac'),
         -- soundboardButton(),
