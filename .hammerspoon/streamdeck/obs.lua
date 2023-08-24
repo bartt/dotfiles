@@ -146,8 +146,8 @@ obsButton = {
         local out = {}
         out[#out + 1] = webcamButton
         out[#out + 1] = microphoneButton
-        out[#out + 1] = conferenceButton
         out[#out + 1] = screentimeButton
+        out[#out + 1] = conferenceButton
         for sceneName, sceneImage in pairs(obsScenes) do
             out[#out + 1] = sceneButton(sceneName)
         end
