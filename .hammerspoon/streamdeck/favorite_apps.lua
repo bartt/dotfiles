@@ -1,15 +1,18 @@
 require('util')
 
+local showRunning = true
+
 favoriteAppsButton = {
   ['name'] = 'favorite apps',
   ['image'] = streamdeck_imageFromSvgFile('favorite-app'),
   ['children'] = function()
     local children = {}
-    children[#children + 1] = peekButtonFor('com.blackmagic-design.DaVinciResolve')
-    children[#children + 1] = peekButtonFor('com.captureone.captureone16')
-    children[#children + 1] = peekButtonFor('com.ononesoftware.ON1PhotoRAW2023.premium')
-    children[#children + 1] = peekButtonFor('com.microsoft.VSCode')
-    children[#children + 1] = peekButtonFor('com.reederapp.rkit2.mac')
+    children[#children + 1] = peekButtonFor('com.blackmagic-design.DaVinciResolve', showRunning)
+    children[#children + 1] = peekButtonFor('com.captureone.captureone16', showRunning)
+    children[#children + 1] = peekButtonFor('com.ononesoftware.ON1PhotoRAW2023.premium', showRunning)
+    children[#children + 1] = peekButtonFor('com.microsoft.VSCode', showRunning)
+    children[#children + 1] = peekButtonFor('com.reederapp.rkit2.mac', showRunning)
+    children[#children + 1] = peekButtonFor('net.kovidgoyal.calibre', showRunning)
     return children
   end
 }

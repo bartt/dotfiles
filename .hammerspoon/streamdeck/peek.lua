@@ -16,16 +16,43 @@ function peekAtApp(appString)
     end
 end
 
-function peekButtonFor(bundleID)
+function peekButtonFor(bundleID, showRunning)
+    local showRunning = showRunning or false
     return {
         ['name'] = "Peek " .. bundleID,
-        ['image'] = hs.image.imageFromAppBundle(bundleID),
+        ['stateProvider'] = function()
+            local app = hs.application.get(bundleID)
+            return {
+                ['isRunning'] = app and app:isRunning() or false
+            }
+        end,
+        ['imageProvider'] = function(context)
+            local elements = {}
+            elements[#elements + 1] = {
+                ['type'] = 'image',
+                ['image'] = hs.image.imageFromAppBundle(bundleID),
+                ['imageScaling'] = 'scaleProportionally'
+            }
+            if showRunning and context['state']['isRunning'] then
+                elements[#elements + 1] = {
+                    ['type'] = 'circle',
+                    ['radius'] = 10,
+                    ['center'] = {
+                        x = 80,
+                        y = 80
+                    },
+                    ['fillColor'] = systemGreenColor
+                }
+            end
+            return streamdeck_imageWithCanvasContents(elements)
+        end,
         ['onClick'] = function()
             peekAtApp(bundleID)
         end,
         ['onLongPress'] = function(holding)
             peekAtApp(bundleID)
-        end
+        end,
+        ['updateInterval'] = 1
     }
 end
 
