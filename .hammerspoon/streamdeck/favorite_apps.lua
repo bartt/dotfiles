@@ -11,6 +11,8 @@ favoriteAppsButton = {
     children[#children + 1] = peekButtonFor('com.captureone.captureone16', showRunning)
     children[#children + 1] = peekButtonFor('com.ononesoftware.ON1PhotoRAW2023.premium', showRunning)
     children[#children + 1] = peekButtonFor('com.microsoft.VSCode', showRunning)
+    children[#children + 1] = peekButtonFor('org.mozilla.firefox', showRunning)
+    children[#children + 1] = peekButtonFor('com.binarynights.ForkLift', showRunning)
     children[#children + 1] = peekButtonFor('com.reederapp.rkit2.mac', showRunning)
     children[#children + 1] = peekButtonFor('net.kovidgoyal.calibre', showRunning)
     return children
