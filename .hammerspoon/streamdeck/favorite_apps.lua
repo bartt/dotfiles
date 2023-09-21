@@ -15,6 +15,7 @@ favoriteAppsButton = {
     children[#children + 1] = peekButtonFor('com.binarynights.ForkLift', showRunning)
     children[#children + 1] = peekButtonFor('com.reederapp.rkit2.mac', showRunning)
     children[#children + 1] = peekButtonFor('net.kovidgoyal.calibre', showRunning)
+    children[#children + 1] = peekButtonFor('com.hamrick.vuescan', showRunning)
     return children
   end
 }

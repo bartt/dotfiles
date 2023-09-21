@@ -74,6 +74,7 @@ conferenceButton = {
         return streamdeck_imageWithCanvasContents(elements)
     end,
     ['onClick'] = activateConference,
+    ['onLongPress'] = lightsOff,
     ['updateInterval'] = 1
 }
 
