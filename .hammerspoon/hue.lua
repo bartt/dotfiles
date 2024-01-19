@@ -2,7 +2,7 @@
 require('util')
 local json = require("dkjson")
 
-local bridgeIp = "192.168.0.249"
+local bridgeIp = "192.168.0.216"
 local apiKey = "wiRGVkmNAaiRFdY2-GPzGwJkQG5SVIFhIuCgm0Bs"
 local lightId = "eacf6bff-cc7d-40ec-88c2-004ec0e26919"
 local url = "https://" .. bridgeIp .. "/clip/v2/resource/light/" .. lightId
