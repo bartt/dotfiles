@@ -117,6 +117,7 @@ obsButton = {
     ['onClick'] = function()
         activateConference()
         if (hs.application.get(obsBundleId) == nil) then
+            hs.execute('rm -f "$HOME/Library/Application Support/obs-studio/safe_mode"')
             hs.application.open(obsBundleId, 0, true)
             obs:start()
         else
@@ -300,6 +301,7 @@ function getScreenshots(scenes)
             ["sceneName"] = obsCurrentSceneName
         }
     })
+    dbg(requests)
     obs:requestBatch(requests)
 end
 
