@@ -26,7 +26,7 @@ local function generateData(options)
 end
 
 local function generateCommand(data)
-    return "curl -k -H 'hue-application-key:" .. apiKey .. "' -X PUT -d '" .. data .. "' " .. url
+    return "curl -k -H 'hue-application-key:" .. apiKey .. "' -X PUT -d '" .. data .. "' " .. url .. " &"
 end
 
 local function executeCommand(data)

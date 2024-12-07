@@ -6,15 +6,19 @@ local obsScenes = {}
 local obsCurrentSceneName = nil
 local obsIsConnected = false
 local obsIsVirtualCamOn = false
+local obsIsStudioEnabled = false
 local isMicrophoneOn = true
 
 local function updateScreenshots()
-    local sceneCount = 0
-    for k,v in pairs(obsScenes) do
-        sceneCount = sceneCount + 1
-    end
-    if obsIsConnected and sceneCount > 0 then
-        getScreenshots(obsScenes)
+    if obsIsConnected then
+        obs:request('GetSceneList')
+        local sceneCount = 0
+        for k,v in pairs(obsScenes) do
+            sceneCount = sceneCount + 1
+        end
+        if sceneCount > 0 then
+            getScreenshots(obsScenes)
+        end
     end
 end
 
@@ -27,8 +31,7 @@ obsCallback = function(eventType, eventIntent, eventData)
 
     if eventType == 'SpoonOBSConnected' then
         obsIsConnected = true
-        obs:request('GetSceneList')
-        obs:request('GetVirtualCamStatus')
+        updateScreenshots()
     end
 
     if eventType == 'SpoonOBSDisconnected' then
@@ -47,7 +50,13 @@ obsCallback = function(eventType, eventIntent, eventData)
         obsCurrentSceneName = eventData['sceneName']
     end
 
+    if eventType == 'StudioModeStateChanged' then 
+        dbg(eventData)
+        obsIsStudioEnabled = eventData['studioModeEnabled']
+    end
+
     if eventType == 'SpoonRequestResponse' then
+        dbg(eventData)
         -- Do we have a successful request response?
         if eventData['responseData'] then
             local responseData = eventData['responseData']
@@ -78,7 +87,7 @@ end
 
 obsBundleId = 'com.obsproject.obs-studio'
 
-obs:init(obsCallback, "localhost", 4455, "6ucP8jTMqTj6r.GFWsfY",
+obs:init(obsCallback, "192.168.0.118", 4455, "6ucP8jTMqTj6r.GFWsfY",
     obs.eventSubscriptionValues.Outputs | obs.eventSubscriptionValues.Scenes)
 
 obsButton = {
@@ -134,11 +143,16 @@ obsButton = {
             end
             hs.timer.waitWhile(function()
                 return obsIsVirtualCamOn
+            end, function() 
+                obs:stop()                
+            end)
+            hs.timer.waitWhile(function()
+                return obsIsConnected
             end, function()
                 activateScreentime()
                 local obsApp = hs.application.get(obsBundleId)
                 if obsApp then
-                    obsApp:kill()
+                    obsApp:kill9()
                 end
             end)
         end
@@ -149,6 +163,7 @@ obsButton = {
         out[#out + 1] = microphoneButton
         out[#out + 1] = screentimeButton
         out[#out + 1] = conferenceButton
+        -- out[#out + 1] = studioButton
         for sceneName, sceneImage in pairs(obsScenes) do
             out[#out + 1] = sceneButton(sceneName)
         end
@@ -204,6 +219,33 @@ microphoneButton = {
     end,
     ['updateInterval'] = 1
 }
+
+studioButton = {
+    ['stateProvider'] = function() 
+        return {
+            ['enabled'] = obsIsStudioEnabled
+        }
+    end,
+    ['imageProvider'] = function(context)
+        dbg(context)
+        local elements = {}
+        local studioSvg = 'obs-studio'
+        if context['state']['enabled'] then
+            elements[#elements + 1] = elementBackground(systemRedColor)
+        end
+        elements[#elements + 1] = elementFromSvgFile(studioSvg)
+        return streamdeck_imageWithCanvasContents(elements)
+    end,
+    ['onClick'] = function()
+        local properties = {
+            ['studioModeEnabled'] = not obsIsStudioEnabled
+        }
+        dbg(properties)
+        obs:request('SetStudioModeEnabled', properties)
+    end,
+    ['updateInterval'] = 1
+}
+
 function sceneButton(sceneName)
     local sceneName = sceneName
     return {
@@ -301,7 +343,7 @@ function getScreenshots(scenes)
             ["sceneName"] = obsCurrentSceneName
         }
     })
-    dbg(requests)
+    -- dbg(requests)
     obs:requestBatch(requests)
 end
 

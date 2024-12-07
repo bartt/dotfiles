@@ -14,26 +14,31 @@ require "streamdeck.soundboard"
 require "streamdeck.nonce"
 require "streamdeck.hovel"
 require "streamdeck.favorite_apps"
+require "streamdeck.printer_lights"
 
 initialButtonState = {
     ['name'] = 'Root',
     ['buttons'] = {
         weatherButton(),
         -- calendarPeekButton(),
-        clockButton,
+        -- clockButton,
         appSwitcher(),
         windowSwitcher(),
-        hovelButton,
+        favoriteAppsButton,
+        obsButton,
 
         audioDeviceButton(false),
         audioDeviceButton(true),
         cpuButton,
-        memoryButton,
-        obsButton,
- 
+        memoryButton, 
         lockButton,
-        favoriteAppsButton,
+
         functionKeys(),
+        pinterLightKeys(),
+        hovelButton,
+        screentimeButton,
+        conferenceButton,
+        
         -- peekButtonFor('com.reederapp.rkit2.mac'),
         -- soundboardButton(),
     }
