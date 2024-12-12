@@ -34,7 +34,7 @@ initialButtonState = {
         lockButton,
 
         functionKeys(),
-        pinterLightKeys(),
+        printerLightKeys(),
         hovelButton,
         screentimeButton,
         conferenceButton,
