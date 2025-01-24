@@ -44,6 +44,9 @@ obsCallback = function(eventType, eventIntent, eventData)
 
     if eventType == 'VirtualcamStateChanged' then
         obsIsVirtualCamOn = eventData['outputActive']
+        if obsIsVirtualCamOn then
+            updateScreenshots()
+        end
     end
 
     if eventType == 'CurrentProgramSceneChanged' then
