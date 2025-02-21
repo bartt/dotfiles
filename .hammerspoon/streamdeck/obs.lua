@@ -7,6 +7,7 @@ local obsCurrentSceneName = nil
 local obsIsConnected = false
 local obsIsVirtualCamOn = false
 local obsIsStudioEnabled = false
+local isHandRaised = false
 local isMicrophoneOn = true
 
 local function updateScreenshots()
@@ -163,6 +164,7 @@ obsButton = {
     ['children'] = function()
         local out = {}
         out[#out + 1] = webcamButton
+        out[#out + 1] = handButton
         out[#out + 1] = microphoneButton
         out[#out + 1] = screentimeButton
         out[#out + 1] = conferenceButton
@@ -192,6 +194,34 @@ webcamButton = {
     end,
     ['onClick'] = function()
         obs:request('ToggleVirtualCam')
+    end,
+    ['updateInterval'] = 1
+}
+
+handButton = {
+    ['stateProvider'] = function()
+        return {
+            ['handRaised'] = isHandRaised
+        }
+    end,
+    ['imageProvider'] = function(context)
+        local elements = {}
+        local handSvg = 'hand-lowered'
+        if context['state']['handRaised'] then
+            elements[#elements + 1] = elementBackground(systemRedColor)
+            handSvg = 'hand-raised'
+        end
+        elements[#elements + 1] = elementFromSvgFile(handSvg)
+        return streamdeck_imageWithCanvasContents(elements)
+        
+    end,
+    ['onClick'] = function()
+        local success = hs.osascript.applescriptFromFile('osascript/meet-hand.applescript')
+        if (success) then 
+            isHandRaised = not isHandRaised
+        else 
+            print("Failed to toggle Meet hand")
+        end
     end,
     ['updateInterval'] = 1
 }
@@ -306,7 +336,9 @@ function getScenes(scenesData)
     end
     local scenes = {}
     for i, scene in pairs(scenesData) do
-        scenes[scene.sceneName] = ""
+        if string.match(scene.sceneName, "👨‍💻") then
+            scenes[scene.sceneName] = ""
+        end
     end
     getScreenshots(scenes)
     return scenes
