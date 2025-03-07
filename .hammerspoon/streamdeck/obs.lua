@@ -7,8 +7,9 @@ local obsCurrentSceneName = nil
 local obsIsConnected = false
 local obsIsVirtualCamOn = false
 local obsIsStudioEnabled = false
-local isHandRaised = false
-local isMicrophoneOn = true
+local isMeetHandRaised = false
+local isMeetMicrophoneOn = true
+local isMeetCameraOn = true
 
 local function updateScreenshots()
     if obsIsConnected then
@@ -40,7 +41,7 @@ obsCallback = function(eventType, eventIntent, eventData)
         obsIsVirtualCamOn = false
         obsCurrentSceneName = nil
         obsScenes = {}
-        isMicrophoneOn = true
+        isMeetMicrophoneOn = true
     end
 
     if eventType == 'VirtualcamStateChanged' then
@@ -164,8 +165,9 @@ obsButton = {
     ['children'] = function()
         local out = {}
         out[#out + 1] = webcamButton
-        out[#out + 1] = handButton
-        out[#out + 1] = microphoneButton
+        out[#out + 1] = meetCameraButton
+        out[#out + 1] = meetMicrophoneButton
+        out[#out + 1] = meetHandButton
         out[#out + 1] = screentimeButton
         out[#out + 1] = conferenceButton
         -- out[#out + 1] = studioButton
@@ -198,18 +200,18 @@ webcamButton = {
     ['updateInterval'] = 1
 }
 
-handButton = {
+meetHandButton = {
     ['stateProvider'] = function()
         return {
-            ['handRaised'] = isHandRaised
+            ['meetHandRaised'] = isMeetHandRaised
         }
     end,
     ['imageProvider'] = function(context)
         local elements = {}
-        local handSvg = 'hand-lowered'
-        if context['state']['handRaised'] then
+        local handSvg = 'meet-hand-lowered'
+        if context['state']['meetHandRaised'] then
             elements[#elements + 1] = elementBackground(systemRedColor)
-            handSvg = 'hand-raised'
+            handSvg = 'meet-hand-raised'
         end
         elements[#elements + 1] = elementFromSvgFile(handSvg)
         return streamdeck_imageWithCanvasContents(elements)
@@ -218,7 +220,7 @@ handButton = {
     ['onClick'] = function()
         local success = hs.osascript.applescriptFromFile('osascript/meet-hand.applescript')
         if (success) then 
-            isHandRaised = not isHandRaised
+            isMeetHandRaised = not isMeetHandRaised
         else 
             print("Failed to toggle Meet hand")
         end
@@ -226,28 +228,55 @@ handButton = {
     ['updateInterval'] = 1
 }
 
-microphoneButton = {
+meetMicrophoneButton = {
     ['stateProvider'] = function()
         return {
-            ['microphoneOn'] = isMicrophoneOn
+            ['meetMicrophoneOn'] = isMeetMicrophoneOn
         }
     end,
     ['imageProvider'] = function(context)
         local elements = {}
-        local microphoneSvg = 'microphone-off'
-        if context['state']['microphoneOn'] then
+        local microphoneSvg = 'meet-microphone-off'
+        if context['state']['meetMicrophoneOn'] then
             elements[#elements + 1] = elementBackground(systemRedColor)
-            microphoneSvg = 'microphone-on'
+            microphoneSvg = 'meet-microphone-on'
         end
         elements[#elements + 1] = elementFromSvgFile(microphoneSvg)
         return streamdeck_imageWithCanvasContents(elements)
     end,
     ['onClick'] = function()
         local success = hs.osascript.applescriptFromFile('osascript/meet-microphone.applescript')
-        if (success) then 
-            isMicrophoneOn = not isMicrophoneOn
+        if success then 
+            isMeetMicrophoneOn = not isMeetMicrophoneOn
         else 
             print("Failed to toggle Meet microphone")
+        end
+    end,
+    ['updateInterval'] = 1
+}
+
+meetCameraButton = {
+    ['stateProvider'] = function()
+        return {
+            ['meetCameraOn'] = isMeetCameraOn
+        }
+    end,
+    ['imageProvider'] = function(context)
+        local elements = {}
+        local cameraSvg = 'meet-camera-off'
+        if context['state']['meetCameraOn'] then
+            elements[#elements + 1] = elementBackground(systemRedColor)
+            cameraSvg = 'meet-camera-on'
+        end
+        elements[#elements + 1] = elementFromSvgFile(cameraSvg)
+        return streamdeck_imageWithCanvasContents(elements)
+    end,
+    ['onClick'] = function()
+        local success = hs.osascript.applescriptFromFile('osascript/meet-camera.applescript')
+        if success then
+            isMeetCameraOn = not isMeetCameraOn
+        else 
+            print("Failed to toggle Meet camera")
         end
     end,
     ['updateInterval'] = 1
