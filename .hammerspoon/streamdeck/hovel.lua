@@ -4,6 +4,7 @@ require('hue')
 require('util')
 
 local hovelScene = nil
+local coffeeState = 'off'
 
 function activateConference()
     hovelScene = 'conference'
@@ -78,6 +79,32 @@ conferenceButton = {
     ['updateInterval'] = 1
 }
 
+coffeeButton = {
+    ['name'] = 'coffee',
+    ['stateProvider'] = function()
+        return {
+            ['coffee'] = coffeeState,
+            ['timestamp'] = os.date('*t')
+        }
+    end,
+    ['imageProvider'] = function(context)
+        local elements = {}
+        elements[#elements + 1] = elementFromSvgFile('coffee-' .. context['state']['coffee'])
+        return streamdeck_imageWithCanvasContents(elements)
+    end,
+    ['onClick'] = function()
+        coffeeState = 'on'
+        setCoffeeState(coffeeState)
+    end,
+    ['onLongPress'] = function(holding)
+        if holding then 
+            coffeeState = 'off'
+            setCoffeeState(coffeeState)
+        end 
+    end,
+    updateInterval = 1
+}
+
 hovelButton = {
     ['name'] = 'hovel',
     ['image'] = streamdeck_imageFromSvgFile('desk'),
@@ -85,6 +112,7 @@ hovelButton = {
         local children = {}
         children[#children + 1] = screentimeButton
         children[#children + 1] = conferenceButton
+        children[#children + 1] = coffeeButton
         return children
     end
 }
