@@ -5,7 +5,7 @@ local replacements = {
     ['/reddit.com'] = '/teddit.net',
     ['old.reddit.com'] = 'teddit.net',
     ['reddit.com'] = 'teddit.net',
-    ['instagram.com'] = 'bibliogram.art'
+    -- ['instagram.com'] = 'bibliogram.art'
 }
 
 function replacePasteboardLinkIfNecessary(contents)
