@@ -92,7 +92,7 @@ end
 
 obsBundleId = 'com.obsproject.obs-studio'
 
-obs:init(obsCallback, "192.168.0.118", 4455, "6ucP8jTMqTj6r.GFWsfY",
+obs:init(obsCallback, "192.168.0.40", 4455, "6ucP8jTMqTj6r.GFWsfY",
     obs.eventSubscriptionValues.Outputs | obs.eventSubscriptionValues.Scenes)
 
 obsButton = {

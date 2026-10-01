@@ -1,6 +1,6 @@
 require('util')
 
-local ipAddress = '192.168.0.35'
+local ipAddress = '192.168.0.34'
 local port = '3333'
 local deviceId = 'n13BeQNO'
 local socketUrl = 'ws://' .. ipAddress .. ':' .. port
